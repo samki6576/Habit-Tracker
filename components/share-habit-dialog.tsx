@@ -34,33 +34,6 @@ export function ShareHabitDialog({ habit }: ShareHabitDialogProps) {
   const [inviteSent, setInviteSent] = useState(false)
   const { toast } = useToast()
 
-  const handleShare = async () => {
-    setLoading(true)
-    try {
-      const sharedHabit = await shareHabit(habit)
-
-      if (sharedHabit) {
-        const url = createShareableLink(sharedHabit.shareCode)
-        setShareUrl(url)
-        setShareCode(sharedHabit.shareCode)
-
-        toast({
-          title: "Habit shared",
-          description: "You can now share this habit with others",
-        })
-      } else {
-        throw new Error("Failed to share habit")
-      }
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: error instanceof Error ? error.message : "Failed to share habit",
-        variant: "destructive",
-      })
-    } finally {
-      setLoading(false)
-    }
-  }
 
   const copyToClipboard = async () => {
     try {
@@ -122,15 +95,11 @@ export function ShareHabitDialog({ habit }: ShareHabitDialogProps) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" size="sm" className="w-full">
-          <Share2 className="h-4 w-4 mr-2" />
-          Share Habit
-        </Button>
+      
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Share Habit</DialogTitle>
-          <DialogDescription>Share "{habit.title}" with friends</DialogDescription>
+          
         </DialogHeader>
 
         {!shareUrl ? (
@@ -138,19 +107,7 @@ export function ShareHabitDialog({ habit }: ShareHabitDialogProps) {
             <p className="text-sm text-muted-foreground mb-4">
               Create a shareable link that allows others to add this habit to their tracker.
             </p>
-            <Button onClick={handleShare} disabled={loading} className="w-full">
-              {loading ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Creating share link...
-                </>
-              ) : (
-                <>
-                  <Share2 className="mr-2 h-4 w-4" />
-                  Create Share Link
-                </>
-              )}
-            </Button>
+          
           </div>
         ) : (
           <Tabs defaultValue="link" className="w-full">

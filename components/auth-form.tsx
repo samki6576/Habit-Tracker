@@ -99,7 +99,7 @@ export function AuthForm({ onSignIn, onSignUp, defaultTab = "signin" }: AuthForm
   }
 
   return (
-    <Card className="w-full max-w-md mx-auto">
+    <Card className="w-full max-w-md mx-auto glass-card">
       <Tabs defaultValue={defaultTab} className="w-full">
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="signin">Sign In</TabsTrigger>

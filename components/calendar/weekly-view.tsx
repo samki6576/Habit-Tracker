@@ -3,15 +3,18 @@
 import type React from "react"
 import { useState, useEffect } from "react"
 import { format, startOfWeek, addDays, isWithinInterval, parseISO } from "date-fns"
-import { useCalendar } from "./CalenderContext";
 import type { Event } from "./event"
 
 interface WeeklyViewProps {
-  onEventClick: (event: Event) => void
+  year: number
+  month: number
+  day: number
+  habits: any[]
+  streakMode: boolean
 }
 
-const WeeklyView: React.FC<WeeklyViewProps> = ({ onEventClick }) => {
-  const { selectedDate, events } = useCalendar()
+const WeeklyView: React.FC<WeeklyViewProps> = ({ year, month, day, habits, streakMode }) => {
+  const selectedDate = new Date(year, month, day)
   const [week, setWeek] = useState<Date[]>([])
 
   useEffect(() => {
@@ -20,12 +23,10 @@ const WeeklyView: React.FC<WeeklyViewProps> = ({ onEventClick }) => {
     setWeek(weekDays)
   }, [selectedDate])
 
-  const getEventsForDay = (day: Date): Event[] => {
-    return events.filter((event: Event) => {
-      const eventStart: Date = parseISO(event.start)
-      const eventEnd: Date = parseISO(event.end)
-      return isWithinInterval(day, { start: eventStart, end: eventEnd })
-    })
+  const getEventsForDay = (day: Date): any[] => {
+    // For now, return empty array since we're not using events
+    // This can be enhanced later to show habit completion data
+    return []
   }
 
   return (
@@ -44,7 +45,6 @@ const WeeklyView: React.FC<WeeklyViewProps> = ({ onEventClick }) => {
               <div
                 key={event.id}
                 className="event"
-                onClick={() => onEventClick(event)}
                 style={{
                   backgroundColor: event.color,
                   color: "white",

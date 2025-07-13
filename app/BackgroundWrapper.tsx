@@ -3,16 +3,14 @@ import { useEffect, useState } from "react"
 import { useTheme } from "next-themes"
 
 const images = [
-  "https://images.unsplash.com/photo-1750173588233-8cd7ba259c15?q=80&w=1920&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-"https://images.unsplash.com/photo-1750263102566-f09e2e24d961?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwyN3x8fGVufDB8fHx8fA%3D%3D",
-"https://images.unsplash.com/photo-1744487347462-db8ad9f942a3?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw4Mnx8fGVufDB8fHx8fA%3D%3D",
-"https://images.unsplash.com/photo-1747597197690-de29ae7d998e?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw4M3x8fGVufDB8fHx8fA%3D%3D"
+"https://images.unsplash.com/photo-1750173588233-8cd7ba259c15?q=80&w=1920&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+
+"https://images.unsplash.com/photo-1717932827502-63ae767e146d?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8YmFsY2slMjBhbmQlMjB3aGl0ZXxlbnwwfHwwfHx8MA%3D%3D",
+"https://images.unsplash.com/photo-1689949669147-afce01cef61d?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8YmFsY2slMjBhbmQlMjB3aGl0ZXxlbnwwfHwwfHx8MA%3D%3D",
+"https://images.unsplash.com/photo-1599033512590-62e7a7789715?q=80&w=387&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
 
 
 
-
-
-,
 ]
 
 export default function BackgroundWrapper({ children }: { children: React.ReactNode }) {
@@ -22,7 +20,7 @@ export default function BackgroundWrapper({ children }: { children: React.ReactN
   useEffect(() => {
     const interval = setInterval(() => {
       setBg(images[Math.floor(Math.random() * images.length)])
-    }, 10000)
+    }, 20000)
     return () => clearInterval(interval)
   }, [])
 

@@ -10,17 +10,24 @@ import { getUserHabits } from "@/lib/habit-service"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Button } from "@/components/ui/button"
 import { HabitList } from "@/components/habit-list"
+import { LoadingPage } from "@/components/loading-page"
 import { NotificationChecker } from "@/components/notification-checker"
 import { NotificationPermissionBanner } from "@/components/notification-permission-banner"
+import { ThemeToggle } from "@/components/theme-toggle"
 import { Toaster } from "@/components/ui/toaster"
 import type { Habit } from "@/lib/types"
 
 export default function DashboardPage() {
   const [loading, setLoading] = useState(true)
   const [habits, setHabits] = useState<Habit[]>([])
-  const [firebaseError, setFirebaseError] = useState<boolean>(!auth)
+  const [firebaseError, setFirebaseError] = useState<boolean>(false)
   const [user, setUser] = useState<any>(null)
   const router = useRouter()
+
+  // Initialize Firebase error state
+  useEffect(() => {
+    setFirebaseError(!auth)
+  }, [])
 
   const fetchHabits = async () => {
     try {
@@ -28,6 +35,9 @@ export default function DashboardPage() {
       setHabits(userHabits)
     } catch (error) {
       console.error("Error fetching habits:", error)
+      // Even if there's an error, the habit service will fall back to demo mode
+      const userHabits = await getUserHabits()
+      setHabits(userHabits)
     }
   }
 
@@ -44,7 +54,6 @@ export default function DashboardPage() {
       if (!user) {
         router.push("/auth")
       } else {
-        // Fetch habits when user is authenticated
         fetchHabits()
       }
     })
@@ -52,12 +61,13 @@ export default function DashboardPage() {
     return () => unsubscribe()
   }, [router])
 
+  useEffect(() => {
+    if (!user) return
+    fetchHabits()
+  }, [user])
+
   if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <Loader2 className="w-8 h-8 animate-spin" />
-      </div>
-    )
+    return <LoadingPage message="Loading..." />
   }
 
   if (firebaseError) {
@@ -67,7 +77,7 @@ export default function DashboardPage() {
           <AlertCircle className="h-4 w-4" />
           <AlertTitle>Firebase Error</AlertTitle>
           <AlertDescription>
-            Firebase authentication could not be initialized. Please check your Firebase configuration.
+            Firebase services could not be initialized. Please check your configuration.
           </AlertDescription>
         </Alert>
 
@@ -79,34 +89,30 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="container py-8">
-      <div className="flex justify-between items-center mb-8">
+    <div className="container py-4 px-4 sm:py-8 sm:px-6 relative">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 sm:mb-8 gap-4">
         <div>
-          <h1 className="text-3xl font-bold">Dashboard</h1>
-          <p className="mt-2 text-gray-500">Track your daily habits and build consistency</p>
+          <h1 className="text-2xl sm:text-3xl font-bold">Dashboard</h1>
+          <p className="mt-2 text-gray-500 text-sm sm:text-base">Track your daily habits and build consistency</p>
         </div>
-        <div className="flex items-center space-x-4">
-          <Button variant="outline" className="flex items-center" onClick={() => router.push("/calendar")}>
-            <Calendar className="h-4 w-4 mr-2" />
-            Calendar
-          </Button>
+        <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4">
+          <div className="flex gap-2 w-full sm:w-auto">
+            <Button variant="outline" size="sm" className="flex items-center flex-1 sm:flex-none" onClick={() => router.push("/calendar")}>
+              <Calendar className="h-4 w-4 mr-2" />
+              <span className="hidden sm:inline">Calendar</span>
+            </Button>
 
-          <Button variant="outline" className="flex items-center" onClick={() => router.push("/stats")}>
-            <BarChart3 className="h-4 w-4 mr-2" />
-            Stats
-          </Button>
+            <Button variant="outline" size="sm" className="flex items-center flex-1 sm:flex-none" onClick={() => router.push("/stats")}>
+              <BarChart3 className="h-4 w-4 mr-2" />
+              <span className="hidden sm:inline">Stats</span>
+            </Button>
+          </div>
 
-          {/* Disable or remove the Shared button below */}
-          {/* 
-          <Button variant="outline" className="flex items-center" onClick={() => router.push("/shared")}>
-            <Share2 className="h-4 w-4 mr-2" />
-            Shared
-          </Button>
-          */}
-
+          <ThemeToggle />
+          
           {user && (
-            <div className="flex items-center">
-              <div className="mr-4 text-right">
+            <div className="flex items-center gap-3">
+              <div className="text-right hidden sm:block">
                 <p className="text-sm font-medium">{user.email}</p>
                 <Button
                   variant="link"

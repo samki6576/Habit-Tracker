@@ -92,3 +92,21 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+@layer components {
+  .glass-card {
+    @apply bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border-white/20 dark:border-gray-700/50 shadow-lg;
+  }
+  
+  .glass-button {
+    @apply bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm border-white/30 dark:border-gray-600/50 shadow-md hover:shadow-lg transition-all duration-200;
+  }
+  
+  .text-shadow {
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .dark .text-shadow {
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  }
+}

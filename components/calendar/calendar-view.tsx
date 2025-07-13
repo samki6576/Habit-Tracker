@@ -7,7 +7,7 @@ import { CalendarGrid } from "@/components/calendar/calendar-grid"
 import { CalendarHeader } from "@/components/calendar/calendar-header"
 import { HabitFilter } from "@/components/calendar/habit-filter"
 import { StreakInfo } from "@/components/calendar/streak-info"
-import WeeklyView from "@/components/calendar/weekly-view"
+import { WeeklyView } from "@/components/calendar/enhanced-weekly-view"
 import { Button } from "@/components/ui/button"
 import type { Habit } from "@/lib/types"
 
@@ -162,7 +162,7 @@ export function CalendarView({ habits }: CalendarViewProps) {
             <span>1-49% Complete</span>
           </div>
           <div className="flex items-center">
-            <div className="w-3 h-3 bg-blue-50 rounded-sm mr-1"></div>
+            <div className="w-3 h-3 bg-black-50 rounded-sm mr-1"></div>
             <span>Today</span>
           </div>
           {streakMode && (

@@ -3,13 +3,29 @@ import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import { ThemeProvider } from 'next-themes';
 import { AuthProvider } from "@/components/auth-provider"
+import { BackgroundWrapper } from "@/components/background-wrapper"
 import './globals.css';
-import BackgroundWrapper from "./BackgroundWrapper";
 
 export const metadata: Metadata = {
   title: "Habit Tracker",
   description: "Track your daily habits and build consistency",
-    generator: 'Samra'
+  generator: 'Samra',
+  icons: {
+    icon: [
+      { url: '/placeholder.svg', type: 'image/svg+xml' },
+      { url: '/placeholder.png' },
+    ],
+    apple: [
+      { url: '/placeholder.png', type: 'image/svg+xml' },
+    ],
+  },
+}
+
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false
 }
 
 const inter = Inter({ subsets: ["latin"] })
@@ -24,9 +40,9 @@ export default function RootLayout({
       <body className={inter.className} suppressHydrationWarning>
         <ThemeProvider 
           attribute="class" 
-          defaultTheme="light" 
-          enableSystem={false}
-          disableTransitionOnChange
+          defaultTheme="system" 
+          enableSystem={true}
+          disableTransitionOnChange={false}
         >
           <AuthProvider>
             <BackgroundWrapper>

@@ -6,7 +6,6 @@ import { Check, Loader2, Trash2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { ReminderSettings } from "@/components/reminder-settings"
-import { ShareHabitDialog } from "@/components/share-habit-dialog"
 import { useToast } from "@/hooks/use-toast"
 import { deleteHabit, markHabitAsDone, unmarkHabitAsDone } from "@/lib/habit-service"
 import { formatTimeForDisplay, getShortDayName } from "@/lib/notification-service"
@@ -88,7 +87,7 @@ export function HabitItem({ habit, onUpdate }: HabitItemProps) {
   }
 
   return (
-    <Card className="w-full">
+    <Card className="w-full glass-card">
       <CardHeader className="pb-2">
         <CardTitle className="text-xl flex justify-between items-center">
           <span>{habit.title}</span>
@@ -107,12 +106,8 @@ export function HabitItem({ habit, onUpdate }: HabitItemProps) {
       <CardContent>
         {habit.description && <p className="text-sm text-gray-500 mb-3">{habit.description}</p>}
 
-        {habit.sharedBy && (
-          <div className="bg-purple-50 text-purple-700 text-xs rounded p-2 mb-3">Shared by: {habit.sharedBy}</div>
-        )}
-
         {habit.reminder?.enabled && (
-          <div className="bg-blue-50 text-blue-700 text-xs rounded p-2 mb-3 flex items-center">
+          <div className="bg-black-50 text-black-700 text-xs rounded p-2 mb-3 flex items-center">
             <span className="font-medium">Reminder:</span>
             <span className="ml-1">
               {formatTimeForDisplay(habit.reminder.time)} on{" "}
@@ -157,10 +152,7 @@ export function HabitItem({ habit, onUpdate }: HabitItemProps) {
           )}
         </Button>
 
-        <div className="grid grid-cols-2 gap-2 w-full">
-          <ReminderSettings habit={habit} onUpdate={onUpdate} />
-          <ShareHabitDialog habit={habit} />
-        </div>
+        <ReminderSettings habit={habit} onUpdate={onUpdate} />
       </CardFooter>
     </Card>
   )

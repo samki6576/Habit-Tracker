@@ -5,6 +5,7 @@ import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "fire
 import { AlertCircle } from "lucide-react"
 
 import { AuthForm } from "@/components/auth-form"
+import { ThemeToggle } from "@/components/theme-toggle"
 import { auth } from "@/lib/firebase"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 
@@ -49,11 +50,14 @@ export default function AuthPage() {
   }
 
   return (
-    <div className="container flex items-center justify-center min-h-screen py-12">
+    <div className="container flex items-center justify-center min-h-screen py-12 relative">
+      <div className="absolute top-4 right-4">
+        <ThemeToggle />
+      </div>
       <div className="w-full max-w-md space-y-6">
         <div className="space-y-2 text-center">
-          <h1 className="text-3xl font-bold">Habit Tracker</h1>
-          <p className="text-gray-500">Track your daily habits and build consistency</p>
+          <h1 className="text-3xl font-bold text-shadow">Habit Tracker</h1>
+          <p className="text-gray-500 dark:text-gray-400">Track your daily habits and build consistency</p>
         </div>
 
         {firebaseError && (

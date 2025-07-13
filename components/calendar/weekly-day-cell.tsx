@@ -21,9 +21,9 @@ export function WeeklyDayCell({ date, habit, isCompleted, isActive, streakMode }
   const currentDay = isToday(date)
 
   // Determine styles based on completion and streak status
-  let bgColor = currentDay ? "bg-blue-50" : ""
+  let bgColor = currentDay ? "bg-black-50" : ""
   if (isCompleted) {
-    bgColor = currentDay ? "bg-blue-50" : "bg-green-50"
+    bgColor = currentDay ? "bg-black-50" : "bg-green-50"
   }
 
   const borderClass = isInActiveStreak ? "ring-2 ring-inset ring-orange-300" : ""

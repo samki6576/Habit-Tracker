@@ -3,7 +3,6 @@
 import React, { useEffect, useState } from "react"
 import { Bell, Loader2 } from "lucide-react"
 import { useRouter } from "next/navigation"
-import { addDoc, collection } from "firebase/firestore"
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
@@ -13,7 +12,7 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { useToast } from "@/hooks/use-toast"
 import { useAuth } from "./auth-provider"
-import { db } from "@/lib/firebase"
+import { createHabit } from "@/lib/habit-service"
 import {
   areNotificationsSupported,
   getNotificationPermission,
@@ -34,12 +33,14 @@ export function HabitForm({ onHabitCreated }: HabitFormProps) {
   const [reminderEnabled, setReminderEnabled] = useState(false)
   const [reminderTime, setReminderTime] = useState("09:00")
   const [reminderDays, setReminderDays] = useState([1, 2, 3, 4, 5]) // Monday to Friday by default
+  const [habits, setHabits] = useState<any[]>([]) // Add state to store habits
   const { toast } = useToast()
   const router = useRouter()
   const { user } = useAuth() // get the current user
 
   const notificationsSupported = areNotificationsSupported()
   const notificationPermission = getNotificationPermission()
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -94,29 +95,30 @@ export function HabitForm({ onHabitCreated }: HabitFormProps) {
         ...(reminder ? { reminder } : {}),
       }
 
-      await addDoc(collection(db, "users", user.uid, "habits"), {
-        ...habitData,
-        createdAt: new Date().toISOString(),
-      })
+      const newHabit = await createHabit(habitData)
 
-      toast({
-        title: "Success",
-        description: "Habit created successfully",
-      })
+      if (newHabit) {
+        toast({
+          title: "Success",
+          description: "Habit created successfully",
+        })
 
-      // Reset form
-      setFormData({
-        title: "",
-        description: "",
-      })
-      setReminderEnabled(false)
+        // Reset form
+        setFormData({
+          title: "",
+          description: "",
+        })
+        setReminderEnabled(false)
 
-      if (onHabitCreated) {
-        onHabitCreated()
+        if (onHabitCreated) {
+          onHabitCreated()
+        }
+
+        router.push("/dashboard")
+        router.refresh()
+      } else {
+        throw new Error("Failed to create habit")
       }
-
-      router.push("/dashboard")
-      router.refresh()
     } catch (error) {
       toast({
         title: "Error",
@@ -149,7 +151,7 @@ export function HabitForm({ onHabitCreated }: HabitFormProps) {
   const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
 
   return (
-    <Card className="w-full max-w-md mx-auto">
+    <Card className="w-full max-w-md mx-auto glass-card">
       <form onSubmit={handleSubmit}>
         <CardHeader>
           <CardTitle className="text-2xl">Create a New Habit</CardTitle>
@@ -249,6 +251,9 @@ export function HabitForm({ onHabitCreated }: HabitFormProps) {
           </Button>
         </CardFooter>
       </form>
+      {habits.map((habit) => (
+        <div key={habit.id}>{habit.title}</div>
+      ))}
     </Card>
   )
 }
