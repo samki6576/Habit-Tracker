@@ -69,10 +69,10 @@ export function StatsDashboard({ habits, loading = false }: StatsDashboardProps)
   }
 
   return (
-    <div className="space-y-6">
-      <h2 className="text-2xl font-bold">Statistics</h2>
+    <div className="space-y-4 sm:space-y-6 w-full max-w-none px-0 sm:px-0">
+      <h2 className="text-xl sm:text-2xl font-bold text-center sm:text-left">Statistics</h2>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-4 w-full">
         <CompletionRateCard
           title="Overall Completion"
           rate={stats.overallCompletionRate}

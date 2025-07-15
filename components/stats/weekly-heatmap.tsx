@@ -23,7 +23,7 @@ export function WeeklyHeatmap({ data }: WeeklyHeatmapProps) {
         <CardDescription>Which days you're most consistent</CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="flex justify-between items-end h-32">
+        <div className="flex justify-between items-end h-32 overflow-x-auto sm:overflow-x-visible px-1 sm:px-0">
           {data.map((item) => {
             // Calculate completion percentage
             const percentage = item.total > 0 ? (item.count / item.total) * 100 : 0

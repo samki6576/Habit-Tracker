@@ -1,1 +1,18 @@
- 
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background circle -->
+  <circle cx="256" cy="256" r="240" fill="#10B981"/>
+  
+  <!-- Checkmark symbol -->
+  <path d="M180 256 L220 296 L340 176" stroke="white" stroke-width="24" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <!-- Small dots representing habits -->
+  <circle cx="120" cy="120" r="8" fill="white" opacity="0.8"/>
+  <circle cx="392" cy="120" r="8" fill="white" opacity="0.8"/>
+  <circle cx="120" cy="392" r="8" fill="white" opacity="0.8"/>
+  <circle cx="392" cy="392" r="8" fill="white" opacity="0.8"/>
+  
+  <!-- Calendar grid lines -->
+  <rect x="140" y="140" width="232" height="232" rx="8" fill="none" stroke="white" stroke-width="4" opacity="0.3"/>
+  <line x1="256" y1="140" x2="256" y2="372" stroke="white" stroke-width="2" opacity="0.3"/>
+  <line x1="140" y1="256" x2="372" y2="256" stroke="white" stroke-width="2" opacity="0.3"/>
+</svg> 

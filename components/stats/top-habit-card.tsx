@@ -27,17 +27,17 @@ export function TopHabitCard({ habit }: TopHabitCardProps) {
   return (
     <Card>
       <CardHeader className="pb-2">
-        <CardTitle className="text-lg">Top Habit</CardTitle>
-        <CardDescription>Your most consistent habit</CardDescription>
+        <CardTitle className="text-base sm:text-lg">Top Habit</CardTitle>
+        <CardDescription className="text-xs sm:text-sm">Your most consistent habit</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="flex items-center">
-          <div className="mr-4 bg-yellow-100 p-2 rounded-full">
-            <Trophy className="h-8 w-8 text-yellow-600" />
+          <div className="mr-2 sm:mr-4 bg-yellow-100 p-2 rounded-full">
+            <Trophy className="h-6 w-6 sm:h-8 sm:w-8 text-yellow-600" />
           </div>
           <div>
-            <h3 className="font-medium">{habit.title}</h3>
-            <p className="text-sm text-muted-foreground">{Math.round(completionRate)}% completion rate</p>
+            <h3 className="font-medium text-sm sm:text-base">{habit.title}</h3>
+            <p className="text-xs sm:text-sm text-muted-foreground">{Math.round(completionRate)}% completion rate</p>
           </div>
         </div>
       </CardContent>

@@ -14,13 +14,13 @@ export function CompletionRateCard({ title, rate, description }: CompletionRateC
   return (
     <Card>
       <CardHeader className="pb-2">
-        <CardTitle className="text-lg">{title}</CardTitle>
-        {description && <CardDescription>{description}</CardDescription>}
+        <CardTitle className="text-base sm:text-lg">{title}</CardTitle>
+        {description && <CardDescription className="text-xs sm:text-sm">{description}</CardDescription>}
       </CardHeader>
-      <CardContent className="space-y-2">
+      <CardContent className="space-y-1 sm:space-y-2">
         <div className="flex justify-between items-center">
-          <span className="text-2xl font-bold">{roundedRate}%</span>
-          <span className="text-sm text-muted-foreground">Last 30 days</span>
+          <span className="text-xl sm:text-2xl font-bold">{roundedRate}%</span>
+          <span className="text-xs sm:text-sm text-muted-foreground">Last 30 days</span>
         </div>
         <Progress value={roundedRate} className="h-2" />
       </CardContent>
