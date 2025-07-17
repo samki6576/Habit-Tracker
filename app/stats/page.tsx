@@ -80,21 +80,23 @@ export default function StatsPage() {
   }
 
   return (
-    <div className="container py-8">
-      <Button variant="ghost" className="mb-6" onClick={() => router.push("/dashboard")}>
+    <div className="container px-2 sm:px-4 py-4 max-w-full">
+      <Button variant="ghost" className="mb-4 sm:mb-6" onClick={() => router.push("/dashboard")}>
         <ArrowLeft className="h-4 w-4 mr-2" />
         Back to Dashboard
       </Button>
 
       {error && (
-        <Alert variant="destructive" className="mb-6">
+        <Alert variant="destructive" className="mb-4 sm:mb-6">
           <AlertCircle className="h-4 w-4" />
           <AlertTitle>Error</AlertTitle>
           <AlertDescription>{error}</AlertDescription>
         </Alert>
       )}
 
-      <StatsDashboard habits={habits} loading={loading} />
+      <div className="overflow-x-auto">
+        <StatsDashboard habits={habits} loading={loading} />
+      </div>
     </div>
   )
 }

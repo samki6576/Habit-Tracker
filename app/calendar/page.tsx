@@ -80,26 +80,28 @@ export default function CalendarPage() {
   }
 
   return (
-    <div className="container py-8">
-      <Button variant="ghost" className="mb-6" onClick={() => router.push("/dashboard")}>
+    <div className="container px-2 sm:px-4 py-4 max-w-full">
+      <Button variant="ghost" className="mb-4 sm:mb-6" onClick={() => router.push("/dashboard")}>
         <ArrowLeft className="h-4 w-4 mr-2" />
         Back to Dashboard
       </Button>
 
-      <div className="mb-6">
-        <h1 className="text-3xl font-bold">Calendar View</h1>
-        <p className="mt-2 text-gray-500">Visualize your habit completion patterns and streaks over time</p>
+      <div className="mb-4 sm:mb-6">
+        <h1 className="text-2xl sm:text-3xl font-bold">Calendar View</h1>
+        <p className="mt-1 sm:mt-2 text-gray-500 text-sm sm:text-base">Visualize your habit completion patterns and streaks over time</p>
       </div>
 
       {error && (
-        <Alert variant="destructive" className="mb-6">
+        <Alert variant="destructive" className="mb-4 sm:mb-6">
           <AlertCircle className="h-4 w-4" />
           <AlertTitle>Error</AlertTitle>
           <AlertDescription>{error}</AlertDescription>
         </Alert>
       )}
 
-      <CalendarView habits={habits} />
+      <div className="overflow-x-auto">
+        <CalendarView habits={habits} />
+      </div>
     </div>
   )
 }

@@ -72,7 +72,7 @@ export function StatsDashboard({ habits, loading = false }: StatsDashboardProps)
     <div className="space-y-4 sm:space-y-6 w-full max-w-none px-0 sm:px-0">
       <h2 className="text-xl sm:text-2xl font-bold text-center sm:text-left">Statistics</h2>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-4 w-full">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 w-full">
         <CompletionRateCard
           title="Overall Completion"
           rate={stats.overallCompletionRate}
@@ -85,10 +85,15 @@ export function StatsDashboard({ habits, loading = false }: StatsDashboardProps)
         />
 
         <TopHabitCard habit={stats.topHabit} />
+      </div>
 
-        <WeeklyHeatmap data={stats.weeklyData} />
-
-        <MonthlyTrend data={stats.monthlyData} />
+      <div className="flex flex-col gap-4 sm:flex-row sm:gap-6 w-full overflow-x-auto">
+        <div className="min-w-[300px] flex-1">
+          <WeeklyHeatmap data={stats.weeklyData} />
+        </div>
+        <div className="min-w-[300px] flex-1">
+          <MonthlyTrend data={stats.monthlyData} />
+        </div>
       </div>
     </div>
   )

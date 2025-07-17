@@ -100,7 +100,7 @@ export function CalendarView({ habits }: CalendarViewProps) {
     <div className="space-y-4">
       <StreakInfo habits={filteredHabits} />
 
-      <div className="flex justify-between items-center flex-wrap gap-2">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center flex-wrap gap-2">
         <CalendarHeader
           year={year}
           month={month}
@@ -111,7 +111,7 @@ export function CalendarView({ habits }: CalendarViewProps) {
           onToday={handleToday}
         />
 
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2 mt-2 sm:mt-0">
           <Button variant="outline" size="sm" onClick={toggleViewType} className="h-8">
             {viewType === "monthly" ? (
               <>
@@ -141,11 +141,13 @@ export function CalendarView({ habits }: CalendarViewProps) {
         </div>
       </div>
 
-      {viewType === "monthly" ? (
-        <CalendarGrid year={year} month={month} habits={filteredHabits} streakMode={streakMode} />
-      ) : (
-        <WeeklyView year={year} month={month} day={day} habits={filteredHabits} streakMode={streakMode} />
-      )}
+      <div className="overflow-x-auto">
+        {viewType === "monthly" ? (
+          <CalendarGrid year={year} month={month} habits={filteredHabits} streakMode={streakMode} />
+        ) : (
+          <WeeklyView year={year} month={month} day={day} habits={filteredHabits} streakMode={streakMode} />
+        )}
+      </div>
 
       <div className="mt-4 text-sm text-gray-500">
         <div className="flex flex-wrap items-center gap-4">

@@ -20,9 +20,9 @@ export function CalendarGrid({ year, month, habits, streakMode }: CalendarGridPr
   const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
 
   return (
-    <div>
+    <div className="overflow-x-auto">
       {/* Days of week header */}
-      <div className="grid grid-cols-7 gap-1 mb-1">
+      <div className="grid grid-cols-7 gap-1 mb-1 min-w-[420px] sm:min-w-0">
         {daysOfWeek.map((day) => (
           <div key={day} className="text-center text-sm font-medium text-gray-500 py-1">
             {day}
@@ -31,7 +31,7 @@ export function CalendarGrid({ year, month, habits, streakMode }: CalendarGridPr
       </div>
 
       {/* Calendar grid */}
-      <div className="grid grid-cols-7 gap-1">
+      <div className="grid grid-cols-7 gap-1 min-w-[420px] sm:min-w-0">
         {calendarDays.map((calendarDay, index) => {
           // For previous month days
           let displayMonth = month
