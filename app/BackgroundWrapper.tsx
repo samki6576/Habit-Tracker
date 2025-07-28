@@ -100,17 +100,16 @@ export default function BackgroundWrapper({ children }: { children: React.ReactN
       <div
         style={{
           background: overlayStyle,
-          boxShadow: "0 4px 32px rgba(0,0,0,0.12)",
-          maxWidth: "900px",
-          width: "100%",
-          margin: "0 auto",
-          padding: "2rem",
-          minHeight: "80vh",
-          display: "flex",
-          flexDirection: "column",
-          boxSizing: "border-box",
+          width: "100vw",
+          height: "100vh",
+          minHeight: "100vh",
+          minWidth: "100vw",
           position: "relative",
           zIndex: 2,
+          boxSizing: "border-box",
+          display: "flex",
+          flexDirection: "column",
+          // Remove boxShadow, maxWidth, margin, padding for full-bleed
         }}
       >
         {children}
