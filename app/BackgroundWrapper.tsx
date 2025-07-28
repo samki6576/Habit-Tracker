@@ -16,44 +16,83 @@ const images = [
 ]
 
 export default function BackgroundWrapper({ children }: { children: React.ReactNode }) {
-  const [bg, setBg] = useState<string | null>(null)
+  const [bgIndex, setBgIndex] = useState(0)
+  const [prevBgIndex, setPrevBgIndex] = useState(0)
+  const [fade, setFade] = useState(false)
   const [mounted, setMounted] = useState(false)
   const { theme } = useTheme()
 
   useEffect(() => {
     setMounted(true)
-    setBg(images[Math.floor(Math.random() * images.length)])
-    const interval = setInterval(() => {
-      setBg(images[Math.floor(Math.random() * images.length)])
-    }, 20000)
-    return () => clearInterval(interval)
+    setBgIndex(Math.floor(Math.random() * images.length))
+    // eslint-disable-next-line
   }, [])
 
-  // Choose overlay color based on theme
+  useEffect(() => {
+    if (!mounted) return
+    const interval = setInterval(() => {
+      setPrevBgIndex(bgIndex)
+      setBgIndex((prev) => {
+        let next = Math.floor(Math.random() * images.length)
+        while (next === prev) next = Math.floor(Math.random() * images.length)
+        return next
+      })
+      setFade(true)
+      setTimeout(() => setFade(false), 1000) // 1s fade duration
+    }, 20000)
+    return () => clearInterval(interval)
+    // eslint-disable-next-line
+  }, [mounted, bgIndex])
+
   const overlayStyle =
     theme === "dark"
-      ? "rgba(30, 30, 30, 0.7)"   // light black for dark mode
-      : "rgba(255, 255, 255, 0.7)" // light white for light mode
+      ? "rgba(30, 30, 30, 0.7)"
+      : "rgba(255, 255, 255, 0.7)"
 
-  // Only render background image after mount to avoid hydration mismatch
   return (
-    <div
-      style={{
-        backgroundImage: mounted && bg ? `url(${bg})` : undefined,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        backgroundRepeat: "no-repeat",
-        minHeight: "100vh",
-        minWidth: "100vw",
-        width: "100vw",
-        height: "100vh",
-        position: "fixed", // <-- makes the background fixed to the viewport
-        top: 0,
-        left: 0,
-        zIndex: -1, // <-- ensures the background stays behind your content
-        overflow: "auto",
-      }}
-    >
+    <div style={{
+      minHeight: "100vh",
+      minWidth: "100vw",
+      width: "100vw",
+      height: "100vh",
+      position: "fixed",
+      top: 0,
+      left: 0,
+      zIndex: -1,
+      overflow: "auto",
+    }}>
+      {/* Previous image */}
+      <div
+        style={{
+          backgroundImage: `url(${images[prevBgIndex]})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: "100vw",
+          height: "100vh",
+          opacity: fade ? 1 : 0,
+          transition: "opacity 1s",
+        }}
+      />
+      {/* Current image */}
+      <div
+        style={{
+          backgroundImage: `url(${images[bgIndex]})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: "100vw",
+          height: "100vh",
+          opacity: fade ? 0 : 1,
+          transition: "opacity 1s",
+        }}
+      />
       <div
         style={{
           background: overlayStyle,
@@ -69,6 +108,8 @@ export default function BackgroundWrapper({ children }: { children: React.ReactN
           display: "flex",
           flexDirection: "column",
           boxSizing: "border-box",
+          position: "relative",
+          zIndex: 1,
         }}
       >
         {children}
