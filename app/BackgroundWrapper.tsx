@@ -1,49 +1,50 @@
 "use client"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useTheme } from "next-themes"
 
 const images = [
-  "https://images.unsplash.com/photo-1750173588233-8cd7ba259c15",
-  "https://images.unsplash.com/photo-1717932827502-63ae767e146d",
-  "https://images.unsplash.com/photo-1689949669147-afce01cef61d",
-  "https://images.unsplash.com/photo-1599033512590-62e7a7789715",
-  "https://images.unsplash.com/photo-1682687220363-35e4621ed990 ",
-  "https://images.unsplash.com/photo-1735657090736-0c8484323c90",
-  "https://images.unsplash.com/photo-1753347135400-37c139c6e3cc",
-  "https://images.unsplash.com/photo-1750665645109-6b2b84bf5abd",
-  "https://images.unsplash.com/photo-1752658801043-bb7ee69073f7",
-  
-  "https://images.unsplash.com/photo-1752035381246-4ebf0c0fffea",
+  "https://images.unsplash.com/photo-1750173588233-8cd7ba259c15?auto=format&fit=crop&w=1920&q=80",
+  "https://images.unsplash.com/photo-1717932827502-63ae767e146d?auto=format&fit=crop&w=1920&q=80",
+  "https://images.unsplash.com/photo-1689949669147-afce01cef61d?auto=format&fit=crop&w=1920&q=80",
+  "https://images.unsplash.com/photo-1599033512590-62e7a7789715?auto=format&fit=crop&w=1920&q=80",
+  "https://images.unsplash.com/photo-1682687220363-35e4621ed990?auto=format&fit=crop&w=1920&q=80",
+  "https://images.unsplash.com/photo-1735657090736-0c8484323c90?auto=format&fit=crop&w=1920&q=80",
+  "https://images.unsplash.com/photo-1753347135400-37c139c6e3cc?auto=format&fit=crop&w=1920&q=80",
+  "https://images.unsplash.com/photo-1750665645109-6b2b84bf5abd?auto=format&fit=crop&w=1920&q=80",
+  "https://images.unsplash.com/photo-1752658801043-bb7ee69073f7?auto=format&fit=crop&w=1920&q=80",
+  "https://images.unsplash.com/photo-1752035381246-4ebf0c0fffea?auto=format&fit=crop&w=1920&q=80",
 ]
 
 export default function BackgroundWrapper({ children }: { children: React.ReactNode }) {
-  const [bgIndex, setBgIndex] = useState(0)
-  const [prevBgIndex, setPrevBgIndex] = useState(0)
-  const [fade, setFade] = useState(false)
-  const [mounted, setMounted] = useState(false)
+  const [current, setCurrent] = useState(0)
+  const [previous, setPrevious] = useState(0)
+  const [fading, setFading] = useState(false)
   const { theme } = useTheme()
+  const intervalRef = useRef<NodeJS.Timeout | null>(null)
+  const fadeDuration = 1000 // ms
 
   useEffect(() => {
-    setMounted(true)
-    setBgIndex(Math.floor(Math.random() * images.length))
-    // eslint-disable-next-line
-  }, [])
-
-  useEffect(() => {
-    if (!mounted) return
-    const interval = setInterval(() => {
-      setPrevBgIndex(bgIndex)
-      setBgIndex((prev) => {
+    intervalRef.current = setInterval(() => {
+      setPrevious(current)
+      setFading(true)
+      setTimeout(() => {
         let next = Math.floor(Math.random() * images.length)
-        while (next === prev) next = Math.floor(Math.random() * images.length)
-        return next
-      })
-      setFade(true)
-      setTimeout(() => setFade(false), 1000) // 1s fade duration
+        while (next === current) next = Math.floor(Math.random() * images.length)
+        setCurrent(next)
+        setFading(false)
+      }, fadeDuration)
     }, 20000)
-    return () => clearInterval(interval)
-    // eslint-disable-next-line
-  }, [mounted, bgIndex])
+    return () => {
+      if (intervalRef.current) clearInterval(intervalRef.current)
+    }
+  }, [current])
+
+  useEffect(() => {
+    images.forEach((src) => {
+      const img = new window.Image()
+      img.src = src
+    })
+  }, [])
 
   const overlayStyle =
     theme === "dark"
@@ -51,66 +52,68 @@ export default function BackgroundWrapper({ children }: { children: React.ReactN
       : "rgba(255, 255, 255, 0.7)"
 
   return (
-    <div style={{
-      minHeight: "100vh",
-      minWidth: "100vw",
-      width: "100vw",
-      height: "100vh",
-      position: "fixed",
-      top: 0,
-      left: 0,
-      zIndex: -1,
-      overflow: "auto",
-    }}>
-      {/* Previous image */}
+    <div
+      style={{
+        minHeight: "100vh",
+        minWidth: "100vw",
+        width: "100vw",
+        height: "100vh",
+        position: "fixed",
+        top: 0,
+        left: 0,
+        zIndex: -1,
+        overflow: "hidden", // prevent scrollbars/white lines
+      }}
+    >
+      {/* Previous image (fades out) */}
       <div
         style={{
-          backgroundImage: `url(${images[prevBgIndex]})`,
+          backgroundImage: `url(${images[previous]})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
+          width: "100vw",
+          height: "100vh",
           position: "absolute",
           top: 0,
           left: 0,
-          width: "100vw",
-          height: "100vh",
-          opacity: fade ? 1 : 0,
-          transition: "opacity 1s",
+          opacity: fading ? 1 : 0,
+          transition: `opacity ${fadeDuration}ms`,
+          zIndex: 0,
         }}
       />
-      {/* Current image */}
+      {/* Current image (fades in) */}
       <div
         style={{
-          backgroundImage: `url(${images[bgIndex]})`,
+          backgroundImage: `url(${images[current]})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
+          width: "100vw",
+          height: "100vh",
           position: "absolute",
           top: 0,
           left: 0,
-          width: "100vw",
-          height: "100vh",
-          opacity: fade ? 0 : 1,
-          transition: "opacity 1s",
+          opacity: fading ? 0 : 1,
+          transition: `opacity ${fadeDuration}ms`,
+          zIndex: 1,
         }}
       />
+      {/* Overlay and content */}
       <div
         style={{
           background: overlayStyle,
-          borderRadius: "16px",
           boxShadow: "0 4px 32px rgba(0,0,0,0.12)",
           maxWidth: "900px",
           width: "100%",
           margin: "0 auto",
           padding: "2rem",
           minHeight: "80vh",
-          marginTop: "3vh",
-          marginBottom: "3vh",
           display: "flex",
           flexDirection: "column",
           boxSizing: "border-box",
           position: "relative",
-          zIndex: 1,
+          zIndex: 2,
         }}
       >
         {children}
