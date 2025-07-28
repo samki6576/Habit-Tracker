@@ -3,21 +3,28 @@ import { useEffect, useState } from "react"
 import { useTheme } from "next-themes"
 
 const images = [
-"https://images.unsplash.com/photo-1750173588233-8cd7ba259c15?q=80&w=1920&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+"https://images.unsplash.com/photo-1750173588233-8cd7ba259c15",
 
-"https://images.unsplash.com/photo-1717932827502-63ae767e146d?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8YmFsY2slMjBhbmQlMjB3aGl0ZXxlbnwwfHwwfHx8MA%3D%3D",
-"https://images.unsplash.com/photo-1689949669147-afce01cef61d?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8YmFsY2slMjBhbmQlMjB3aGl0ZXxlbnwwfHwwfHx8MA%3D%3D",
-"https://images.unsplash.com/photo-1599033512590-62e7a7789715?q=80&w=387&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+"https://images.unsplash.com/photo-1717932827502-63ae767e146d",
+"https://images.unsplash.com/photo-1689949669147-afce01cef61d",
 
-
+"https://images.unsplash.com/photo-1599033512590-62e7a7789715",
+"https://images.unsplash.com/photo-1682687220363-35e4621ed990 ",
+"https://images.unsplash.com/photo-1735657090736-0c8484323c90",
+"https://images.unsplash.com/photo-1753347135400-37c139c6e3cc",
+"https://images.unsplash.com/photo-1750665645109-6b2b84bf5abd",
+"https://images.unsplash.com/photo-1752658801043-bb7ee69073f7",
+"https://images.unsplash.com/photo-1752035381246-4ebf0c0fffea"
 
 ]
 
 export default function BackgroundWrapper({ children }: { children: React.ReactNode }) {
-  const [bg, setBg] = useState(images[0])
+  const [bg, setBg] = useState<string | null>(null)
   const { theme } = useTheme()
 
   useEffect(() => {
+    // Set initial background image randomly on client
+    setBg(images[Math.floor(Math.random() * images.length)])
     const interval = setInterval(() => {
       setBg(images[Math.floor(Math.random() * images.length)])
     }, 20000)
@@ -33,7 +40,7 @@ export default function BackgroundWrapper({ children }: { children: React.ReactN
   return (
     <div
       style={{
-        backgroundImage: `url(${bg})`,
+        backgroundImage: bg ? `url(${bg})` : undefined,
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",

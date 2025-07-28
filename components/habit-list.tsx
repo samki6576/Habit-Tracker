@@ -46,7 +46,7 @@ export function HabitList({ habits, onRefresh }: HabitListProps) {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
         <h2 className="text-xl sm:text-2xl font-bold">Your Habits</h2>
-        <div className="flex gap-2">
+        <div className="flex gap-2 items-center">
           <Button onClick={handleAddHabit} size="sm" className="flex-1 sm:flex-none">
             <Plus className="h-4 w-4 mr-2" />
             Add Habit
