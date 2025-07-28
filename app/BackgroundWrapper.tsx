@@ -3,27 +3,25 @@ import { useEffect, useState } from "react"
 import { useTheme } from "next-themes"
 
 const images = [
-"https://images.unsplash.com/photo-1750173588233-8cd7ba259c15",
-
-"https://images.unsplash.com/photo-1717932827502-63ae767e146d",
-"https://images.unsplash.com/photo-1689949669147-afce01cef61d",
-
-"https://images.unsplash.com/photo-1599033512590-62e7a7789715",
-"https://images.unsplash.com/photo-1682687220363-35e4621ed990 ",
-"https://images.unsplash.com/photo-1735657090736-0c8484323c90",
-"https://images.unsplash.com/photo-1753347135400-37c139c6e3cc",
-"https://images.unsplash.com/photo-1750665645109-6b2b84bf5abd",
-"https://images.unsplash.com/photo-1752658801043-bb7ee69073f7",
-"https://images.unsplash.com/photo-1752035381246-4ebf0c0fffea"
-
+  "https://images.unsplash.com/photo-1750173588233-8cd7ba259c15",
+  "https://images.unsplash.com/photo-1717932827502-63ae767e146d",
+  "https://images.unsplash.com/photo-1689949669147-afce01cef61d",
+  "https://images.unsplash.com/photo-1599033512590-62e7a7789715",
+  "https://images.unsplash.com/photo-1682687220363-35e4621ed990 ",
+  "https://images.unsplash.com/photo-1735657090736-0c8484323c90",
+  "https://images.unsplash.com/photo-1753347135400-37c139c6e3cc",
+  "https://images.unsplash.com/photo-1750665645109-6b2b84bf5abd",
+  "https://images.unsplash.com/photo-1752658801043-bb7ee69073f7",
+  "https://images.unsplash.com/photo-1752035381246-4ebf0c0fffea",
 ]
 
 export default function BackgroundWrapper({ children }: { children: React.ReactNode }) {
   const [bg, setBg] = useState<string | null>(null)
+  const [mounted, setMounted] = useState(false)
   const { theme } = useTheme()
 
   useEffect(() => {
-    // Set initial background image randomly on client
+    setMounted(true)
     setBg(images[Math.floor(Math.random() * images.length)])
     const interval = setInterval(() => {
       setBg(images[Math.floor(Math.random() * images.length)])
@@ -37,10 +35,11 @@ export default function BackgroundWrapper({ children }: { children: React.ReactN
       ? "rgba(30, 30, 30, 0.7)"   // light black for dark mode
       : "rgba(255, 255, 255, 0.7)" // light white for light mode
 
+  // Only render background image after mount to avoid hydration mismatch
   return (
     <div
       style={{
-        backgroundImage: bg ? `url(${bg})` : undefined,
+        backgroundImage: mounted && bg ? `url(${bg})` : undefined,
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
