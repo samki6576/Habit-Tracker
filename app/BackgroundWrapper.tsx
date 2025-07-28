@@ -39,6 +39,7 @@ export default function BackgroundWrapper({ children }: { children: React.ReactN
     }
   }, [current])
 
+  // Preload images
   useEffect(() => {
     images.forEach((src) => {
       const img = new window.Image()
@@ -59,10 +60,10 @@ export default function BackgroundWrapper({ children }: { children: React.ReactN
         width: "100vw",
         height: "100vh",
         position: "fixed",
-        top: 0,
-        left: 0,
+        inset: 0,
         zIndex: -1,
-        overflow: "hidden", // prevent scrollbars/white lines
+        overflow: "hidden",
+        backgroundColor: "#111", // fallback color for black
       }}
     >
       {/* Previous image (fades out) */}
@@ -72,14 +73,12 @@ export default function BackgroundWrapper({ children }: { children: React.ReactN
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
-          width: "100vw",
-          height: "100vh",
-          position: "absolute",
-          top: 0,
-          left: 0,
+          position: "fixed",
+          inset: 0,
           opacity: fading ? 1 : 0,
           transition: `opacity ${fadeDuration}ms`,
           zIndex: 0,
+          backgroundColor: "#111", // fallback color
         }}
       />
       {/* Current image (fades in) */}
@@ -89,14 +88,12 @@ export default function BackgroundWrapper({ children }: { children: React.ReactN
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
-          width: "100vw",
-          height: "100vh",
-          position: "absolute",
-          top: 0,
-          left: 0,
+          position: "fixed",
+          inset: 0,
           opacity: fading ? 0 : 1,
           transition: `opacity ${fadeDuration}ms`,
           zIndex: 1,
+          backgroundColor: "#111", // fallback color
         }}
       />
       {/* Overlay and content */}
