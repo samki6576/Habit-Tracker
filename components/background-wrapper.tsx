@@ -42,7 +42,7 @@ export function BackgroundWrapper({ children }: BackgroundWrapperProps) {
   const currentTheme = resolvedTheme || theme
 
   return (
-    <div className="min-h-screen relative overflow-hidden">
+    <div className="min-h-screen relative">
       {/* Background Image */}
       <div 
         className="fixed inset-0 z-0 transition-all duration-1000 ease-in-out"
@@ -50,7 +50,7 @@ export function BackgroundWrapper({ children }: BackgroundWrapperProps) {
           backgroundImage: `url(${bg})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
-          backgroundAttachment: 'fixed'
+          backgroundRepeat: 'no-repeat'
         }}
       />
       
