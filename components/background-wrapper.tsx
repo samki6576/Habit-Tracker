@@ -43,7 +43,7 @@ export function BackgroundWrapper({ children }: BackgroundWrapperProps) {
 
   return (
     <div className="min-h-screen relative">
-      {/* Background Image */}
+      {/* Background Image with Overlay */}
       <div 
         className="fixed inset-0 z-0 transition-all duration-1000 ease-in-out"
         style={{
@@ -52,16 +52,16 @@ export function BackgroundWrapper({ children }: BackgroundWrapperProps) {
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat'
         }}
-      />
-      
-      {/* Overlay for better text readability */}
-      <div 
-        className={`fixed inset-0 z-0 transition-all duration-1000 ease-in-out ${
-          currentTheme === 'dark' 
-            ? 'bg-black/40' 
-            : 'bg-white/40'
-        }`}
-      />
+      >
+        {/* Overlay for better text readability */}
+        <div 
+          className={`absolute inset-0 transition-all duration-1000 ease-in-out ${
+            currentTheme === 'dark' 
+              ? 'bg-black/40' 
+              : 'bg-white/40'
+          }`}
+        />
+      </div>
       
       {/* Content */}
       <div className="relative z-10 min-h-screen">
