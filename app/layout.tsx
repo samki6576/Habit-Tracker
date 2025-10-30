@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   description: "Track your daily habits and build consistency",
   generator: "Samra",
   viewport: "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no",
-     icons: {
+  icons: {
     icon: [
       { url: "/placeholder.png", sizes: "32x32" },
       { url: "/placeholder.png", type: "image/png", sizes: "192x192" },
@@ -25,39 +25,3 @@ export const metadata: Metadata = {
   },
 };
 
-};
-
-const inter = Inter({ subsets: ["latin"] });
-
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  return (
-    <html lang="en" suppressHydrationWarning>
-      <head>
-        {/* 👇 Add these two lines for PWA */}
-        <link rel="manifest" href="/manifest.json" />
-        <meta name="theme-color" content="#00bfa6" />
-      </head>
-      <body className={inter.className} suppressHydrationWarning>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="light"
-          enableSystem={false}
-          disableTransitionOnChange
-        >
-          <AuthProvider>
-            <GrayscaleProvider>
-              <BackgroundWrapper>{children}</BackgroundWrapper>
-            </GrayscaleProvider>
-          </AuthProvider>
-        </ThemeProvider>
-
-        {/* 👇 Add this at the end of body */}
-        <RegisterServiceWorker />
-      </body>
-    </html>
-  );
-}
