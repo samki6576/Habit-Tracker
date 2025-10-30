@@ -13,6 +13,18 @@ export const metadata: Metadata = {
   description: "Track your daily habits and build consistency",
   generator: "Samra",
   viewport: "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no",
+     icons: {
+    icon: [
+      { url: "/er.png", sizes: "32x32" },
+      { url: "/er.png", type: "image/png", sizes: "192x192" },
+      { url: "/er.png", type: "image/png", sizes: "512x512" },
+    ],
+    apple: [
+      { url: "/er.png", type: "image/png", sizes: "180x180" },
+    ],
+  },
+};
+
 };
 
 const inter = Inter({ subsets: ["latin"] });
