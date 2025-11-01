@@ -4,7 +4,7 @@ const nextConfig = {
   },
   output: "standalone",
   pageExtensions: ["js", "jsx", "ts", "tsx"],
-  dirs: ["src/app"], // 👈 tells Next where to look
+  dirs: ["/app"], // 👈 tells Next where to look
 };
 
 module.exports = nextConfig;
