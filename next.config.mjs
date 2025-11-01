@@ -1,14 +1,11 @@
-/** @type {import('next').NextConfig} */
 const nextConfig = {
-  eslint: {
-    ignoreDuringBuilds: true,
+  experimental: {
+    appDir: true,
   },
-  typescript: {
-    ignoreBuildErrors: true,
-  },
-  images: {
-    unoptimized: true,
-  },
-}
+  output: "standalone",
+  pageExtensions: ["js", "jsx", "ts", "tsx"],
+  dirs: ["src/app"], // 👈 tells Next where to look
+};
 
-export default nextConfig
+module.exports = nextConfig;
+
