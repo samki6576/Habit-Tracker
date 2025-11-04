@@ -1,0 +1,33 @@
+
+{
+    "name": "Habit Tracker",
+    "short_name": "Habit",
+    "description": "A simple habit tracker app by Zizy.",
+    "start_url": "/",
+    "scope": "/",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#008080",
+    "orientation": "portrait",
+    "id": "com.zizy.habittracker",
+    "icons": [
+      {
+        "src": "/logo.png",
+        "sizes": "192x192",
+        "type": "image/png"
+      },
+      {
+        "src": "/logo.png",
+        "sizes": "512x512",
+        "type": "image/png"
+      },
+      {
+        "src": "/logo.png",
+        "sizes": "512x512",
+        "type": "image/png",
+        "purpose": "any maskable"
+      }
+    ]
+  }
+  
+

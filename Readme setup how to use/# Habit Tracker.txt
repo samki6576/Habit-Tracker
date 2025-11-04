@@ -1,0 +1,85 @@
+# Habit Tracker
+
+A modern, responsive habit tracking web app built with Next.js, Firebase, and Tailwind CSS.
+
+---
+
+## Features
+
+- User authentication (Firebase Auth)
+- Create, edit, and delete habits
+- Track daily progress and streaks
+- Responsive design for mobile and desktop
+- Animated background transitions
+- Light/dark theme support
+
+---
+
+## Getting Started
+
+### 1. **Unzip the Project**
+
+Extract the contents of the ZIP file to your desired folder.
+
+### 2. **Install Dependencies**
+
+Make sure you have [Node.js](https://nodejs.org/) installed (v18+ recommended).
+
+Open a terminal in the project folder and run:
+
+```bash
+npm install
+```
+
+### 3. **Set Up Firebase**
+
+- Go to [Firebase Console](https://console.firebase.google.com/) and create a new project.
+- Enable **Authentication** (Email/Password or your preferred method).
+- Create a **Cloud Firestore** database.
+- In the Firebase Console, go to **Project Settings > General > Your apps** and copy your Firebase config.
+
+Create a file named `.env.local` in the root of the project and add your Firebase config like this:
+
+```
+NEXT_PUBLIC_FIREBASE_API_KEY=your_api_key
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your_auth_domain
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=your_project_id
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=your_storage_bucket
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=your_messaging_sender_id
+NEXT_PUBLIC_FIREBASE_APP_ID=your_app_id
+```
+
+### 4. **Run the App Locally**
+
+```bash
+npm run dev
+```
+
+Visit [http://localhost:3000](http://localhost:3000) in your browser.
+
+---
+
+## Deployment
+
+You can deploy this app to [Vercel](https://vercel.com/) or any platform that supports Next.js.  
+Just make sure to set the same environment variables in your deployment settings.
+
+---
+
+## Customization
+
+- **Images:** Replace or add background images in `app/BackgroundWrapper.tsx`.
+- **Logo:** Place your logo in the `/public` folder and update references as needed.
+- **Theme:** Customize Tailwind or theme settings in `tailwind.config.js`.
+
+---
+
+## License
+
+Full ownership and rights are transferred with this codebase.
+
+---
+
+## Support
+
+If you have any issues running or deploying the app, please open an issue on GitHub or contact
