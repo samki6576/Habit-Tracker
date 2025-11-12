@@ -4,15 +4,21 @@ import { Inter } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 import { AuthProvider } from "@/components/auth-provider";
 import { GrayscaleProvider } from "@/components/grayscale-provider";
+import { InstallPrompt } from "@/components/install-prompt";
 import "./globals.css";
 import BackgroundWrapper from "./BackgroundWrapper";
-import RegisterServiceWorker from "./registerServiceWorker"; // 👈 add this
 
 // ✅ App metadata
 export const metadata: Metadata = {
   title: "Habit Tracker",
   description: "Track your daily habits and build consistency",
   generator: "Samra",
+  manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "Habit Tracker",
+  },
   icons: {
     icon: [
       { url: "/logo.png", sizes: "32x32" },
@@ -62,8 +68,8 @@ export default function RootLayout({
           </AuthProvider>
         </ThemeProvider>
 
-        {/* 👇 Register PWA service worker */}
-        <RegisterServiceWorker />
+        {/* 👇 PWA Install Prompt */}
+        <InstallPrompt />
       </body>
     </html>
   );
