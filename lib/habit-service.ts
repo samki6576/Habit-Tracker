@@ -19,6 +19,7 @@ const DEMO_HABITS_KEY = "demoHabits"
 
 // Initialize demo habits if not already in localStorage
 const initDemoHabits = () => {
+  if (typeof window === 'undefined') return
   if (!localStorage.getItem(DEMO_HABITS_KEY)) {
     const defaultHabits: Habit[] = [
       {
@@ -57,6 +58,7 @@ const initDemoHabits = () => {
 
 // Get demo habits from localStorage
 const getDemoHabits = (): Habit[] => {
+  if (typeof window === 'undefined') return []
   initDemoHabits()
   const habits = localStorage.getItem(DEMO_HABITS_KEY)
   return habits ? JSON.parse(habits) : []
@@ -64,6 +66,7 @@ const getDemoHabits = (): Habit[] => {
 
 // Save demo habits to localStorage
 const saveDemoHabits = (habits: Habit[]) => {
+  if (typeof window === 'undefined') return
   localStorage.setItem(DEMO_HABITS_KEY, JSON.stringify(habits))
 }
 

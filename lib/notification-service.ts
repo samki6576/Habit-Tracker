@@ -35,7 +35,7 @@ export function getNotificationPermission(): NotificationPermission {
 export async function saveReminderSettings(habitId: string, reminder: Reminder | null): Promise<boolean> {
   if (!auth?.currentUser || !db) {
     // In demo mode, update the habit in memory
-    if (habitId.startsWith("demo-")) {
+    if (habitId.startsWith("demo-") && typeof window !== 'undefined') {
       const demoHabits = window.localStorage.getItem("demoHabits")
       if (demoHabits) {
         const habits = JSON.parse(demoHabits)

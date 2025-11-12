@@ -43,9 +43,11 @@ export async function shareHabit(habit: Habit): Promise<SharedHabit | null> {
     }
 
     // Store in localStorage
-    const sharedHabits = getSharedHabitsFromLocalStorage()
-    sharedHabits.push(sharedHabit)
-    localStorage.setItem("sharedHabits", JSON.stringify(sharedHabits))
+    if (typeof window !== 'undefined') {
+      const sharedHabits = getSharedHabitsFromLocalStorage()
+      sharedHabits.push(sharedHabit)
+      localStorage.setItem("sharedHabits", JSON.stringify(sharedHabits))
+    }
 
     return sharedHabit
   }
@@ -85,6 +87,7 @@ export async function shareHabit(habit: Habit): Promise<SharedHabit | null> {
 
 // Get shared habits from localStorage (for demo mode)
 function getSharedHabitsFromLocalStorage(): SharedHabit[] {
+  if (typeof window === 'undefined') return []
   const sharedHabits = localStorage.getItem("sharedHabits")
   return sharedHabits ? JSON.parse(sharedHabits) : []
 }
@@ -155,16 +158,20 @@ export async function importSharedHabit(sharedHabit: SharedHabit): Promise<Habit
     }
 
     // Add to demo habits
-    const demoHabits = JSON.parse(localStorage.getItem("demoHabits") || "[]")
-    demoHabits.push(habit)
-    localStorage.setItem("demoHabits", JSON.stringify(demoHabits))
+    if (typeof window !== 'undefined') {
+      const demoHabits = JSON.parse(localStorage.getItem("demoHabits") || "[]")
+      demoHabits.push(habit)
+      localStorage.setItem("demoHabits", JSON.stringify(demoHabits))
+    }
 
     // Mark as claimed
-    const sharedHabits = getSharedHabitsFromLocalStorage()
-    const index = sharedHabits.findIndex((h) => h.id === sharedHabit.id)
-    if (index !== -1) {
-      sharedHabits[index].claimed = true
-      localStorage.setItem("sharedHabits", JSON.stringify(sharedHabits))
+    if (typeof window !== 'undefined') {
+      const sharedHabits = getSharedHabitsFromLocalStorage()
+      const index = sharedHabits.findIndex((h) => h.id === sharedHabit.id)
+      if (index !== -1) {
+        sharedHabits[index].claimed = true
+        localStorage.setItem("sharedHabits", JSON.stringify(sharedHabits))
+      }
     }
 
     return habit
@@ -249,9 +256,11 @@ export async function deleteSharedHabit(sharedHabitId: string): Promise<boolean>
 
   // Demo mode
   if (!db || sharedHabitId.startsWith("demo-share-")) {
-    const sharedHabits = getSharedHabitsFromLocalStorage()
-    const updatedSharedHabits = sharedHabits.filter((h) => h.id !== sharedHabitId)
-    localStorage.setItem("sharedHabits", JSON.stringify(updatedSharedHabits))
+    if (typeof window !== 'undefined') {
+      const sharedHabits = getSharedHabitsFromLocalStorage()
+      const updatedSharedHabits = sharedHabits.filter((h) => h.id !== sharedHabitId)
+      localStorage.setItem("sharedHabits", JSON.stringify(updatedSharedHabits))
+    }
     return true
   }
 
