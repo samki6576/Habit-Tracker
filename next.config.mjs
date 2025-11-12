@@ -4,9 +4,6 @@ import withPWA from 'next-pwa';
 const isCapacitorBuild = process.env.CAPACITOR_BUILD === 'true';
 
 const nextConfig = {
-  experimental: {
-    appDir: true,
-  },
   // For Capacitor, we need static export; otherwise use standalone for PWA
   ...(isCapacitorBuild
     ? {

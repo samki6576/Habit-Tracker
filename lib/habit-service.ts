@@ -230,7 +230,7 @@ export async function unmarkHabitAsDone(habitId: string): Promise<boolean> {
 
     if (habitIndex !== -1) {
       const today = getTodayDate()
-      habits[habitIndex].doneDates = habits[habitIndex].doneDates.filter((date) => date !== today)
+      habits[habitIndex].doneDates = habits[habitIndex].doneDates.filter((date: string) => date !== today)
       saveDemoHabits(habits)
       return true
     }
@@ -247,11 +247,11 @@ export async function unmarkHabitAsDone(habitId: string): Promise<boolean> {
     if (!habitDoc.exists()) throw new Error("Habit not found")
 
     const habitData = habitDoc.data()
-    const doneDates = habitData.doneDates || []
+    const doneDates: string[] = habitData.doneDates || []
     const today = getTodayDate()
 
     // Remove today from doneDates
-    const updatedDoneDates = doneDates.filter((date) => date !== today)
+    const updatedDoneDates = doneDates.filter((date: string) => date !== today)
 
     await updateDoc(habitRef, {
       doneDates: updatedDoneDates,
@@ -268,7 +268,7 @@ export async function unmarkHabitAsDone(habitId: string): Promise<boolean> {
 
       if (habitIndex !== -1) {
         const today = getTodayDate()
-        habits[habitIndex].doneDates = habits[habitIndex].doneDates.filter((date) => date !== today)
+        habits[habitIndex].doneDates = habits[habitIndex].doneDates.filter((date: string) => date !== today)
         saveDemoHabits(habits)
         return true
       }
