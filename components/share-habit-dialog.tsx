@@ -37,6 +37,9 @@ export function ShareHabitDialog({ habit }: ShareHabitDialogProps) {
 
   const copyToClipboard = async () => {
     try {
+      if (typeof navigator === 'undefined' || !navigator.clipboard) {
+        throw new Error('Clipboard API not available')
+      }
       await navigator.clipboard.writeText(shareUrl)
       setCopied(true)
 

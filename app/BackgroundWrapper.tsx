@@ -57,7 +57,7 @@ export default function BackgroundWrapper({ children }: { children: React.ReactN
 
   // Preload images
   useEffect(() => {
-    if (!mounted) return
+    if (!mounted || typeof window === 'undefined') return
     images.forEach((src) => {
       const img = new window.Image()
       img.src = src
