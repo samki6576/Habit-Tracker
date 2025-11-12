@@ -31,10 +31,13 @@ export function InstallPrompt() {
       return;
     }
 
-    // Check if running as PWA
-    if (window.navigator.standalone === true) {
-      setIsInstalled(true);
-      return;
+    // Check if running as PWA (iOS Safari specific)
+    if (typeof window !== 'undefined' && 'standalone' in window.navigator) {
+      const nav = window.navigator as Navigator & { standalone?: boolean };
+      if (nav.standalone === true) {
+        setIsInstalled(true);
+        return;
+      }
     }
 
     // Listen for the beforeinstallprompt event
