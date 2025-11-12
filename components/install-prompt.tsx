@@ -23,6 +23,7 @@ export function InstallPrompt() {
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [showInstallPrompt, setShowInstallPrompt] = useState(false);
   const [isInstalled, setIsInstalled] = useState(false);
+  const [showManualPrompt, setShowManualPrompt] = useState(false);
 
   useEffect(() => {
     // Check if app is already installed
@@ -115,8 +116,6 @@ export function InstallPrompt() {
   }
 
   // Fallback: Show manual install instructions for Chrome
-  const [showManualPrompt, setShowManualPrompt] = useState(false);
-
   useEffect(() => {
     // Only show manual prompt if automatic prompt didn't appear after a delay
     const timer = setTimeout(() => {
