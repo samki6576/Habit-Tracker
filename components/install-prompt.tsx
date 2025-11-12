@@ -26,40 +26,47 @@ export function InstallPrompt() {
   const [showManualPrompt, setShowManualPrompt] = useState(false);
 
   useEffect(() => {
-    // Check if app is already installed
-    if (window.matchMedia('(display-mode: standalone)').matches) {
-      setIsInstalled(true);
-      return;
-    }
+    // Ensure we're in the browser
+    if (typeof window === 'undefined') return;
 
-    // Check if running as PWA (iOS Safari specific)
-    if (typeof window !== 'undefined' && 'standalone' in window.navigator) {
-      const nav = window.navigator as Navigator & { standalone?: boolean };
-      if (nav.standalone === true) {
+    // Check if app is already installed
+    try {
+      if (window.matchMedia('(display-mode: standalone)').matches) {
         setIsInstalled(true);
         return;
       }
+
+      // Check if running as PWA (iOS Safari specific)
+      if ('standalone' in window.navigator) {
+        const nav = window.navigator as Navigator & { standalone?: boolean };
+        if (nav.standalone === true) {
+          setIsInstalled(true);
+          return;
+        }
+      }
+
+      // Listen for the beforeinstallprompt event
+      const handleBeforeInstallPrompt = (e: Event) => {
+        e.preventDefault();
+        setDeferredPrompt(e as BeforeInstallPromptEvent);
+        setShowInstallPrompt(true);
+      };
+
+      window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+
+      // Check if app was installed
+      window.addEventListener('appinstalled', () => {
+        setIsInstalled(true);
+        setShowInstallPrompt(false);
+        setDeferredPrompt(null);
+      });
+
+      return () => {
+        window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+      };
+    } catch (error) {
+      console.error('Error in install prompt setup:', error);
     }
-
-    // Listen for the beforeinstallprompt event
-    const handleBeforeInstallPrompt = (e: Event) => {
-      e.preventDefault();
-      setDeferredPrompt(e as BeforeInstallPromptEvent);
-      setShowInstallPrompt(true);
-    };
-
-    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
-
-    // Check if app was installed
-    window.addEventListener('appinstalled', () => {
-      setIsInstalled(true);
-      setShowInstallPrompt(false);
-      setDeferredPrompt(null);
-    });
-
-    return () => {
-      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
-    };
   }, []);
 
   const handleInstallClick = async () => {
@@ -80,7 +87,13 @@ export function InstallPrompt() {
   const handleDismiss = () => {
     setShowInstallPrompt(false);
     // Store dismissal in localStorage to avoid showing again for a while
-    localStorage.setItem('pwa-install-dismissed', Date.now().toString());
+    try {
+      if (typeof window !== 'undefined' && window.localStorage) {
+        localStorage.setItem('pwa-install-dismissed', Date.now().toString());
+      }
+    } catch (error) {
+      console.error('Error saving dismissal:', error);
+    }
   };
 
   // Don't show if already installed
@@ -118,22 +131,28 @@ export function InstallPrompt() {
   // Fallback: Show manual install instructions for Chrome
   useEffect(() => {
     // Only show manual prompt if automatic prompt didn't appear after a delay
+    if (typeof window === 'undefined') return;
+
     const timer = setTimeout(() => {
-      if (!deferredPrompt && !isInstalled && typeof window !== 'undefined') {
-        const isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
-        const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
-        
-        if (isChrome && !isStandalone) {
-          // Check if user dismissed recently (within 24 hours)
-          const dismissedTime = localStorage.getItem('pwa-install-dismissed');
-          if (dismissedTime) {
-            const hoursSinceDismissed = (Date.now() - parseInt(dismissedTime)) / (1000 * 60 * 60);
-            if (hoursSinceDismissed < 24) {
-              return; // Don't show if dismissed recently
+      try {
+        if (!deferredPrompt && !isInstalled) {
+          const isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
+          const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
+          
+          if (isChrome && !isStandalone) {
+            // Check if user dismissed recently (within 24 hours)
+            const dismissedTime = localStorage.getItem('pwa-install-dismissed');
+            if (dismissedTime) {
+              const hoursSinceDismissed = (Date.now() - parseInt(dismissedTime)) / (1000 * 60 * 60);
+              if (hoursSinceDismissed < 24) {
+                return; // Don't show if dismissed recently
+              }
             }
+            setShowManualPrompt(true);
           }
-          setShowManualPrompt(true);
         }
+      } catch (error) {
+        console.error('Error showing manual install prompt:', error);
       }
     }, 3000); // Wait 3 seconds before showing manual prompt
 

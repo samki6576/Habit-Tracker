@@ -4,7 +4,7 @@ import withPWA from 'next-pwa';
 const isCapacitorBuild = process.env.CAPACITOR_BUILD === 'true';
 
 const nextConfig = {
-  // For Capacitor, we need static export; otherwise use standalone for PWA
+  // For Capacitor, we need static export; otherwise use default (works better with PWA on Vercel)
   ...(isCapacitorBuild
     ? {
         output: 'export',
@@ -12,9 +12,7 @@ const nextConfig = {
           unoptimized: true,
         },
       }
-    : {
-        output: 'standalone',
-      }),
+    : {}),
 };
 
 const pwaConfig = withPWA({
