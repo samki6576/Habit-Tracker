@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react"
 import { useTheme } from "next-themes"
 
 const images = [
+  "https://images.unsplash.com/photo-1762882555456-ac0494bf1477?q=80&w=387&auto=format&fit=crop&w=1920&q=80",
    "https://images.unsplash.com/photo-1750173588233-8cd7ba259c15?auto=format&fit=crop&w=1920&q=80",
   "https://images.unsplash.com/photo-1717932827502-63ae767e146d?auto=format&fit=crop&w=1920&q=80",
   "https://images.unsplash.com/photo-1689949669147-afce01cef61d?auto=format&fit=crop&w=1920&q=80",
