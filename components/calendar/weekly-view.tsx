@@ -2,14 +2,15 @@
 
 import type React from "react"
 import { useState, useEffect } from "react"
-import { format, startOfWeek, addDays, isWithinInterval, parseISO } from "date-fns"
+import { format, startOfWeek, addDays } from "date-fns"
 import type { Event } from "./event"
+import type { Habit } from "@/lib/types"
 
 interface WeeklyViewProps {
   year: number
   month: number
   day: number
-  habits: any[]
+  habits: Habit[]
   streakMode: boolean
 }
 
@@ -23,7 +24,7 @@ const WeeklyView: React.FC<WeeklyViewProps> = ({ year, month, day, habits, strea
     setWeek(weekDays)
   }, [selectedDate])
 
-  const getEventsForDay = (day: Date): any[] => {
+  const getEventsForDay = (day: Date): Event[] => {
     // For now, return empty array since we're not using events
     // This can be enhanced later to show habit completion data
     return []

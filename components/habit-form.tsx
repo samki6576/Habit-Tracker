@@ -33,7 +33,6 @@ export function HabitForm({ onHabitCreated }: HabitFormProps) {
   const [reminderEnabled, setReminderEnabled] = useState(false)
   const [reminderTime, setReminderTime] = useState("09:00")
   const [reminderDays, setReminderDays] = useState([1, 2, 3, 4, 5]) // Monday to Friday by default
-  const [habits, setHabits] = useState<any[]>([]) // Add state to store habits
   const { toast } = useToast()
   const router = useRouter()
   const { user } = useAuth() // get the current user
@@ -251,9 +250,6 @@ export function HabitForm({ onHabitCreated }: HabitFormProps) {
           </Button>
         </CardFooter>
       </form>
-      {habits.map((habit) => (
-        <div key={habit.id}>{habit.title}</div>
-      ))}
     </Card>
   )
 }

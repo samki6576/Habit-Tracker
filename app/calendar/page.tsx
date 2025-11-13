@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, useCallback } from "react"
 import { useRouter } from "next/navigation"
 import { onAuthStateChanged } from "firebase/auth"
 import { AlertCircle, ArrowLeft, Loader2 } from "lucide-react"
@@ -18,6 +18,19 @@ export default function CalendarPage() {
   const [firebaseError, setFirebaseError] = useState<boolean>(!auth)
   const [error, setError] = useState<string | null>(null)
   const router = useRouter()
+
+  const fetchHabits = useCallback(async () => {
+    try {
+      setError(null)
+      const userHabits = await getUserHabits()
+      setHabits(userHabits)
+    } catch (error) {
+      setError(error instanceof Error ? error.message : "Failed to fetch habits")
+      console.error("Error fetching habits:", error)
+    } finally {
+      setLoading(false)
+    }
+  }, [])
 
   useEffect(() => {
     if (!auth) {
@@ -38,20 +51,7 @@ export default function CalendarPage() {
     })
 
     return () => unsubscribe()
-  }, [router])
-
-  const fetchHabits = async () => {
-    try {
-      setError(null)
-      const userHabits = await getUserHabits()
-      setHabits(userHabits)
-    } catch (error) {
-      setError(error instanceof Error ? error.message : "Failed to fetch habits")
-      console.error("Error fetching habits:", error)
-    } finally {
-      setLoading(false)
-    }
-  }
+  }, [router, fetchHabits])
 
   if (loading) {
     return (

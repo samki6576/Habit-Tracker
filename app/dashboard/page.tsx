@@ -1,8 +1,8 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, useCallback } from "react"
 import { useRouter } from "next/navigation"
-import { onAuthStateChanged } from "firebase/auth"
+import { onAuthStateChanged, type User } from "firebase/auth"
 import { AlertCircle, BarChart3, Calendar, Loader2 } from "lucide-react"
 
 import { auth } from "@/lib/firebase"
@@ -21,15 +21,10 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true)
   const [habits, setHabits] = useState<Habit[]>([])
   const [firebaseError, setFirebaseError] = useState<boolean>(false)
-  const [user, setUser] = useState<any>(null)
+  const [user, setUser] = useState<User | null>(null)
   const router = useRouter()
 
-  // Initialize Firebase error state
-  useEffect(() => {
-    setFirebaseError(!auth)
-  }, [])
-
-  const fetchHabits = async () => {
+  const fetchHabits = useCallback(async () => {
     try {
       const userHabits = await getUserHabits()
       setHabits(userHabits)
@@ -39,7 +34,12 @@ export default function DashboardPage() {
       const userHabits = await getUserHabits()
       setHabits(userHabits)
     }
-  }
+  }, [])
+
+  // Initialize Firebase error state
+  useEffect(() => {
+    setFirebaseError(!auth)
+  }, [])
 
   useEffect(() => {
     if (!auth) {
@@ -59,12 +59,12 @@ export default function DashboardPage() {
     })
 
     return () => unsubscribe()
-  }, [router])
+  }, [router, fetchHabits])
 
   useEffect(() => {
     if (!user) return
     fetchHabits()
-  }, [user])
+  }, [user, fetchHabits])
 
   if (loading) {
     return <LoadingPage message="Loading..." />
