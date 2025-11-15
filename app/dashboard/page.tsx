@@ -3,7 +3,7 @@
 import { useEffect, useState, useCallback } from "react"
 import { useRouter } from "next/navigation"
 import { onAuthStateChanged, type User } from "firebase/auth"
-import { AlertCircle, BarChart3, Calendar, Loader2 } from "lucide-react"
+import { AlertCircle, BarChart3, Calendar } from "lucide-react"
 
 import { auth } from "@/lib/firebase"
 import { getUserHabits } from "@/lib/habit-service"
@@ -16,6 +16,8 @@ import { NotificationPermissionBanner } from "@/components/notification-permissi
 import { ThemeToggle } from "@/components/theme-toggle"
 import { Toaster } from "@/components/ui/toaster"
 import type { Habit } from "@/lib/types"
+
+import { checkAndSendNotifications } from "@/lib/notification-service"
 
 export default function DashboardPage() {
   const [loading, setLoading] = useState(true)
@@ -30,17 +32,17 @@ export default function DashboardPage() {
       setHabits(userHabits)
     } catch (error) {
       console.error("Error fetching habits:", error)
-      // Even if there's an error, the habit service will fall back to demo mode
-      const userHabits = await getUserHabits()
+      const userHabits = await getUserHabits() // fallback demo mode
       setHabits(userHabits)
     }
   }, [])
 
-  // Initialize Firebase error state
+  // Firebase Error Check
   useEffect(() => {
     setFirebaseError(!auth)
   }, [])
 
+  // Auth Check
   useEffect(() => {
     if (!auth) {
       setLoading(false)
@@ -51,6 +53,7 @@ export default function DashboardPage() {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setLoading(false)
       setUser(user)
+
       if (!user) {
         router.push("/auth")
       } else {
@@ -61,10 +64,30 @@ export default function DashboardPage() {
     return () => unsubscribe()
   }, [router, fetchHabits])
 
+  // Fetch habits when user updates
   useEffect(() => {
     if (!user) return
     fetchHabits()
   }, [user, fetchHabits])
+
+  // 🔥 NOTIFICATION LOOP — MUST BE BEFORE ANY RETURN
+  useEffect(() => {
+    if (!habits.length) return
+
+    // Run immediately once
+    checkAndSendNotifications(habits)
+
+    // Run every 1 minute
+    const interval = setInterval(() => {
+      checkAndSendNotifications(habits)
+    }, 60000)
+
+    return () => clearInterval(interval)
+  }, [habits])
+
+  // -------------------------
+  //       RETURNS BELOW
+  // -------------------------
 
   if (loading) {
     return <LoadingPage message="Loading..." />
@@ -95,21 +118,32 @@ export default function DashboardPage() {
           <h1 className="text-2xl sm:text-3xl font-bold">Dashboard</h1>
           <p className="mt-2 text-gray-500 text-sm sm:text-base">Track your daily habits and build consistency</p>
         </div>
+
         <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4">
           <div className="flex gap-2 w-full sm:w-auto">
-            <Button variant="outline" size="sm" className="flex items-center flex-1 sm:flex-none" onClick={() => router.push("/calendar")}>
+            <Button
+              variant="outline"
+              size="sm"
+              className="flex items-center flex-1 sm:flex-none"
+              onClick={() => router.push("/calendar")}
+            >
               <Calendar className="h-4 w-4 mr-2" />
               <span className="hidden sm:inline">Calendar</span>
             </Button>
 
-            <Button variant="outline" size="sm" className="flex items-center flex-1 sm:flex-none" onClick={() => router.push("/stats")}>
+            <Button
+              variant="outline"
+              size="sm"
+              className="flex items-center flex-1 sm:flex-none"
+              onClick={() => router.push("/stats")}
+            >
               <BarChart3 className="h-4 w-4 mr-2" />
               <span className="hidden sm:inline">Stats</span>
             </Button>
           </div>
 
           <ThemeToggle />
-          
+
           {user && (
             <div className="flex items-center gap-3">
               <div className="text-right hidden sm:block">
